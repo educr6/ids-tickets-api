@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request
 import flask
-import sandbox
+from json_db_client import JsonDbClient
 
 
 
@@ -15,23 +15,26 @@ def hello_world():
 @app.route('/ticket', methods=["GET", 'POST'])
 def tickets():
 
+    db_client = JsonDbClient('./tickets_db.json')
+
+
     if (flask.request.method == "GET"):
         return {
             "meta": {
                 "test": "test"
             },
-            "data": sandbox.get_tickets()
+            "data": db_client.get_tickets()
         }
     
     if (flask.request.method == "POST"):
 
         new_ticket = request.json
-        
+
         return {
             "meta": {
                 "test": "test"
             },
-            "data": sandbox.create_ticket(new_ticket)
+            "data": db_client.create_ticket(new_ticket)
         }
 
     
@@ -39,12 +42,14 @@ def tickets():
 @app.route('/ticket/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def single_ticket(id):
 
+    db_client = JsonDbClient('./tickets_db.json')
+
     if (flask.request.method == 'GET'):
         return {
             "meta": {
                 "test": "test"
             },
-            "data": sandbox.get_ticket_by_id(id)
+            "data": db_client.get_ticket_by_id(id)
         }
     
     if (flask.request.method == 'PUT'):
@@ -55,7 +60,7 @@ def single_ticket(id):
             "meta": {
                 "test": "test"
             },
-            "data": sandbox.update_ticket(id, updated_ticket)
+            "data": db_client.update_ticket(id, updated_ticket)
 
         }
     
@@ -65,7 +70,7 @@ def single_ticket(id):
             "meta": {
                 "test": "test"
             },
-            "data": sandbox.delete_ticket(id)
+            "data": db_client.delete_ticket(id)
         }
 
     
