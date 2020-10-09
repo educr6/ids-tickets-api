@@ -2,6 +2,7 @@ import json
 import random
 import pprint
 import string
+from datetime import datetime
 
 def read_file():
     
@@ -62,7 +63,7 @@ def id_exists(id):
     return phantom_ticket != {}
 
 def get_current_date_string():
-    return 
+    return datetime.today().strftime('%Y-%m-%d')
 
 
 
@@ -77,6 +78,7 @@ def create_ticket(ticket):
     
     ticket["id"] = ticket_id
     ticket["code"] = generate_code()
+    ticket["submission-date"] = get_current_date_string()
 
     data = get_tickets()
     data.append(ticket)
@@ -90,10 +92,14 @@ def delete_ticket(id):
     tickets = get_tickets()
     ticket_to_delete = get_ticket_by_id(id)
 
+    if (ticket_to_delete == {}):
+        return ticket_to_delete
+
     tickets.remove(ticket_to_delete)
     write_file(tickets)
 
     return ticket_to_delete
+    
 
 def update_ticket(id, new_ticket_info):
 
@@ -105,8 +111,8 @@ def update_ticket(id, new_ticket_info):
         if (single_ticket["id"] == id):
 
             single_ticket["name"] = new_ticket_info["name"]
-            single_ticket["type"] = new_ticket_info["name"]
-            single_ticket["status"] = new_ticket_info["name"]
+            single_ticket["type"] = new_ticket_info["type"]
+            single_ticket["status"] = new_ticket_info["status"]
 
             updated_ticket = single_ticket
     
@@ -115,25 +121,16 @@ def update_ticket(id, new_ticket_info):
     return updated_ticket
             
 
-            
+
+
+
+        
 
 
 
 
-    return
 
 
-
-
-pp = pprint.PrettyPrinter(indent=4)
-print("TICKETS INITIALLY")
-pp.pprint(get_tickets())
-
-
-print("DELETED TICKET")
-pp.pprint(delete_ticket(256))
-print("NEW LIST")
-pp.pprint(get_tickets())
 
 
 
