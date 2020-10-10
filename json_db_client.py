@@ -120,6 +120,7 @@ class JsonDbClient:
                 single_ticket["name"] = new_ticket_info["name"]
                 single_ticket["type"] = new_ticket_info["type"]
                 single_ticket["status"] = new_ticket_info["status"]
+                single_ticket["details"] = new_ticket_info["details"]
 
                 updated_ticket = single_ticket
         
